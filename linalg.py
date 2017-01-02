@@ -42,16 +42,26 @@ class Vector(object):
             return Vector(newCoords)
 
     def getMagnitude(self):
+        """ Returns the magnitude (length) of the given Vector """
         coordinatesSquared = [x**2 for x in self.coordinates]
         return math.sqrt(sum(coordinatesSquared))
 
     def getNormalization(self):
+        """ Returns the unit vector representation of the given Vector """
         selfMag = self.getMagnitude()
         try:
             return self * ((1/selfMag))
 
         except ZeroDivisionError:
             raise exception("Cannot normalize the zero vector")
+
+    def angleDiff(self, other, units="rad"):
+        rads = math.acos((self * other) / (self.getMagnitude() * other.getMagnitude()))
+        if units == "rad":
+            return rads
+        else:
+            return math.degrees(rads)
+
 
 if __name__ == "__main__":
     myVec1 = Vector([1,2,3])
