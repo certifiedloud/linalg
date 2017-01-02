@@ -2,9 +2,10 @@
 import math
 
 class Vector(object):
-    def __init__(self, coordinates):
+    def __init__(self, coordinates, tolerance=1e-10):
         self.coordinates = tuple(coordinates)
         self.dimension = len(coordinates)
+        self.tolerance = tolerance
 
     def __str__(self):
         return "{}".format(self.coordinates)
@@ -55,6 +56,9 @@ class Vector(object):
         except ZeroDivisionError:
             raise exception("Cannot normalize the zero vector")
 
+    def isZero(self):
+        return self.getMagnitude() < self.tolerance
+
     def angleDiff(self, other, units="rad"):
         """ Returns the angle between two vectors """
         rads = math.acos((self * other) / (self.getMagnitude() * other.getMagnitude()))
@@ -63,11 +67,15 @@ class Vector(object):
         else:
             return math.degrees(rads)
 
-    def orthogonal(self, other):
-        """ Returns true of the vectors are parallel to each other """
-        if self * other == 0:
-            return True
-        return False
+    def orthogonalTo(self, other):
+        """ Returns true of the vectors are orthogonal to each other """
+        return abs(self * other) < self.tolerance
+
+    def parallelTo(self, other):
+        """ Returns true if the vectors are parallel to each other """
+        return (self.isZero() or other.isZero() or 
+                self.angleDiff(other, "deg") == 0 or
+                self.angleDiff(other, "deg") == 180)
 
 if __name__ == "__main__":
     myVec1 = Vector([1,2,3])
