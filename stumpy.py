@@ -56,12 +56,18 @@ class Vector(object):
             raise exception("Cannot normalize the zero vector")
 
     def angleDiff(self, other, units="rad"):
+        """ Returns the angle between two vectors """
         rads = math.acos((self * other) / (self.getMagnitude() * other.getMagnitude()))
         if units == "rad":
             return rads
         else:
             return math.degrees(rads)
 
+    def orthogonal(self, other):
+        """ Returns true of the vectors are parallel to each other """
+        if self * other == 0:
+            return True
+        return False
 
 if __name__ == "__main__":
     myVec1 = Vector([1,2,3])
