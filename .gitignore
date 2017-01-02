@@ -6,6 +6,9 @@ __pycache__/
 # vim swap
 *.swp
 
+# Intellij
+*.idea
+
 # C extensions
 *.so
 

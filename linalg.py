@@ -1,6 +1,5 @@
 """ A python class to represent vectors """
 import math
-import operator
 
 class Vector(object):
     def __init__(self, coordinates):
@@ -31,32 +30,37 @@ class Vector(object):
 
     def __mul__(self, other):
         if type(other) is Vector:
-            theta = math.acos(operator.mul(self.getDirection(), other.getDirection()))
-            return operator.mul(self.getMagnitude(), other.getMagnitude(), math.cos(theta))
+            selfMag = self.getMagnitude()
+            otherMag = other.getMagnitude()
+            allOfProducts = [x*y for x,y in zip(self.coordinates,  other.coordinates)]
+            return sum(allOfProducts)
+
         else:
             newCoords = []
             for i in range(self.dimension):
-                newCoords.append(operator.mul(self.coordinates[i], other))
+                newCoords.append(self.coordinates[i] * other)
             return Vector(newCoords)
 
     def getMagnitude(self):
         coordinatesSquared = [x**2 for x in self.coordinates]
         return math.sqrt(sum(coordinatesSquared))
 
-    def getDirection(self):
+    def getNormalization(self):
+        selfMag = self.getMagnitude()
         try:
-            return self * ((1/self.getMagnitude()))
+            return self * ((1/selfMag))
 
         except ZeroDivisionError:
             raise exception("Cannot normalize the zero vector")
 
 if __name__ == "__main__":
     myVec1 = Vector([1,2,3])
-    myVec2 = Vector([4,5,6])
+    myVec2 = Vector([-2,0,5])
     print("Vec1 {}".format(myVec1))
     print("Vec2 {}".format(myVec2))
     print("Vec1 + Vec2  = {}".format(myVec1 + myVec2))
     print("Vec1 - Vec2  = {}".format(myVec1 - myVec2))
     print("Vec1 * 2  = {}".format(myVec1 * 2))
+    print("Vec1 * Vec2  = {}".format(myVec1 * myVec2))
     print("Vec1 Magnitude = {}".format(myVec1.getMagnitude()))
-    print("Vec2 Magnitude = {}".format(myVec2.getMagnitude()))
+    print("Vec2 Normalized = {}".format(myVec2.getNormalization()))
